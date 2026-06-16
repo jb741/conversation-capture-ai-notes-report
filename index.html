@@ -118,6 +118,23 @@
     .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.1); padding: 12px 16px; border-radius: 999px; backdrop-filter: blur(12px); box-shadow: 0 16px 42px rgba(0,0,0,.24); font-weight: 800; }
     .btn.primary { background: linear-gradient(135deg, var(--blue), var(--green)); color: #06111e; border: 0; }
     .mini { font-size: 12px; color: var(--muted2); }
+
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 22px; }
+    .product-card { overflow: hidden; padding: 0; min-height: 100%; }
+    .product-card .imgbox { height: 190px; display:grid; place-items:center; background: radial-gradient(circle at 50% 10%, rgba(255,255,255,.18), rgba(255,255,255,.04)); border-bottom:1px solid var(--line); }
+    .product-card img { max-width: 88%; max-height: 165px; object-fit: contain; filter: drop-shadow(0 22px 26px rgba(0,0,0,.34)); }
+    .product-card .body { padding: 18px; }
+    .product-card h3 { margin: 0 0 6px; font-size: 21px; letter-spacing: -.03em; }
+    .specs { display:grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+    .spec { border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.055); border-radius:14px; padding:9px; font-size:12px; color:var(--muted); }
+    .spec b { display:block; color:var(--text); font-size:13px; }
+    .grade { width:52px; height:52px; border-radius:17px; display:grid; place-items:center; font-weight:950; color:#05111f; background:linear-gradient(135deg,var(--green),var(--blue)); float:right; margin-left:10px; }
+    .decision-tree { display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top:22px; }
+    .decision { padding:22px; border-left:4px solid var(--green); }
+    .decision:nth-child(2n){ border-left-color:var(--blue); }
+    .decision h3{ margin:0 0 8px; }
+    @media (max-width: 900px) { .product-grid, .decision-tree { grid-template-columns:1fr; } }
+
     @media (max-width: 900px) {
       .hero-grid, .two, .cards, .source-grid { grid-template-columns: 1fr; }
       .flow { grid-template-columns: 1fr; }
@@ -233,6 +250,112 @@
             <tr><td>Android business/personal calls</td><td><span class="pill">Samsung/Google/Truecaller</span></td><td>Some Android dialers support call recording, transcripts, summaries.</td><td>Device/carrier/region dependent.</td></tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+
+    <section class="section" id="product-deep-dive">
+      <div class="wrap">
+        <h2>Product deep dive with images</h2>
+        <p class="sub">Scored for Jon’s actual use: discreet, fast to start, captures both real-life and phone conversations, produces useful AI summaries, and does not create a weird social/privacy vibe.</p>
+        <div class="product-grid">
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.plaud.ai/cdn/shop/files/NotePro-_-2_fdc31980-a483-420d-b385-3723c698c9b7.png?v=1779783768" alt="PLAUD Note Pro" loading="lazy"></div>
+            <div class="body"><div class="grade">A</div><span class="pill best">Best overall</span><h3>PLAUD Note Pro</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$189</div><div class="spec"><b>Battery</b>30–50h claimed</div><div class="spec"><b>Phone calls</b>Yes</div><div class="spec"><b>Jon fit</b>A</div></div>
+              <p>Best mix of discreet, call-capable, mature AI notes. This is the one I’d test first.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.plaud.ai/cdn/shop/files/BL-plaud-note-052526.webp?v=1779709941" alt="PLAUD Note" loading="lazy"></div>
+            <div class="body"><div class="grade">A-</div><span class="pill best">Value pick</span><h3>PLAUD Note</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$159</div><div class="spec"><b>Battery</b>30h claimed</div><div class="spec"><b>Phone calls</b>Yes</div><div class="spec"><b>Jon fit</b>A-</div></div>
+              <p>Similar workflow for less money; choose if Pro feels overkill.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.plaud.ai/cdn/shop/files/plaud-notepin-gray-0225.webp?v=1774430287" alt="PLAUD NotePin" loading="lazy"></div>
+            <div class="body"><div class="grade">B</div><span class="pill best">Wearable meetings</span><h3>PLAUD NotePin</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$159–179</div><div class="spec"><b>Battery</b>20h claimed</div><div class="spec"><b>Phone calls</b>Weak/No</div><div class="spec"><b>Jon fit</b>B</div></div>
+              <p>Useful if you accept a visible pin/necklace; less ideal for phone calls.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://ticnote.ai/cdn/shop/files/TicNote_8886a4d2-5be4-4baa-8293-0b90ec1a297e.jpg?v=1778746935" alt="Mobvoi TicNote" loading="lazy"></div>
+            <div class="body"><div class="grade">B+</div><span class="pill best">PLAUD alternative</span><h3>Mobvoi TicNote</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$160–180</div><div class="spec"><b>Battery</b>25h claimed</div><div class="spec"><b>Phone calls</b>Yes</div><div class="spec"><b>Jon fit</b>B+</div></div>
+              <p>Interesting phone-attached recorder; verify subscription/reliability before betting on it.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.notta.ai/pictures/4a6cfba3-4747-4a46-aaea-2b0f820b2d0d-memo-page-og-image-en.jpeg" alt="Notta Memo" loading="lazy"></div>
+            <div class="body"><div class="grade">B</div><span class="pill best">Notta ecosystem</span><h3>Notta Memo</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$149</div><div class="spec"><b>Battery</b>mixed claims</div><div class="spec"><b>Phone calls</b>Yes</div><div class="spec"><b>Jon fit</b>B</div></div>
+              <p>Good if you like Notta workspace; specs/pricing need checkout confirmation.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://cdn.shopify.com/s/files/1/0516/3761/6830/files/D3200Z11_DTC_listing_image_TD01_US_V2.png?v=1781074469" alt="soundcore Work" loading="lazy"></div>
+            <div class="body"><div class="grade">B</div><span class="pill best">Tiny clip recorder</span><h3>soundcore Work</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$159</div><div class="spec"><b>Battery</b>~8h device / case</div><div class="spec"><b>Phone calls</b>Not core</div><div class="spec"><b>Jon fit</b>B</div></div>
+              <p>Good in-person option from Anker; less complete than PLAUD for calls.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.hidock.com/cdn/shop/files/26NY_Combo_SKU-6.jpg?v=1767257085&width=1200" alt="HiDock P1" loading="lazy"></div>
+            <div class="body"><div class="grade">B-</div><span class="pill best">Bluetooth calls</span><h3>HiDock P1</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$119–169</div><div class="spec"><b>Battery</b>not core</div><div class="spec"><b>Phone calls</b>Bluetooth-focused</div><div class="spec"><b>Jon fit</b>B-</div></div>
+              <p>Great if calls happen through Bluetooth earbuds; not the all-purpose real-life layer.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://cdn.prod.website-files.com/66fa553073ee1d0460bdc3d1/68793a7a67d213f39236788d_bee-opengraph.png" alt="Bee AI" loading="lazy"></div>
+            <div class="body"><div class="grade">C</div><span class="pill best">Cheap lifelogger</span><h3>Bee AI</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$50</div><div class="spec"><b>Battery</b>7 days claimed</div><div class="spec"><b>Phone calls</b>No</div><div class="spec"><b>Jon fit</b>C</div></div>
+              <p>Cheap and interesting, but socially/privacy awkward for business.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.omi.me/cdn/shop/files/Copy_of_Front_Glow_NoBG.png?v=1768511543" alt="Omi" loading="lazy"></div>
+            <div class="body"><div class="grade">C</div><span class="pill best">Tinker/dev wearable</span><h3>Omi</h3>
+              <div class="specs"><div class="spec"><b>Price</b>varies</div><div class="spec"><b>Battery</b>10–14h</div><div class="spec"><b>Phone calls</b>No</div><div class="spec"><b>Jon fit</b>C</div></div>
+              <p>More AI-companion/open-source wearable than polished business notetaker.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://friend.com/og-image.jpg" alt="Friend" loading="lazy"></div>
+            <div class="body"><div class="grade">D</div><span class="pill best">AI companion</span><h3>Friend</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$129</div><div class="spec"><b>Battery</b>not core</div><div class="spec"><b>Phone calls</b>No</div><div class="spec"><b>Jon fit</b>D</div></div>
+              <p>Not a business recorder. More companion/lifelogging than notes.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.looki.ai/cdn/shop/files/black_01.png?v=1780413192" alt="Looki L1" loading="lazy"></div>
+            <div class="body"><div class="grade">D</div><span class="pill best">Multimodal lifelogging</span><h3>Looki L1</h3>
+              <div class="specs"><div class="spec"><b>Price</b>~$249</div><div class="spec"><b>Battery</b>1–3h continuous</div><div class="spec"><b>Phone calls</b>No</div><div class="spec"><b>Jon fit</b>D</div></div>
+              <p>Camera makes it too sensitive/awkward for business conversations.</p>
+            </div>
+          </article>
+          <article class="glass product-card">
+            <div class="imgbox"><img src="https://www.limitless.ai/media/og-preview.jpg" alt="Limitless Pendant" loading="lazy"></div>
+            <div class="body"><div class="grade">D</div><span class="pill best">Discontinued</span><h3>Limitless Pendant</h3>
+              <div class="specs"><div class="spec"><b>Price</b>not sold new</div><div class="spec"><b>Battery</b>all-day claimed</div><div class="spec"><b>Phone calls</b>No</div><div class="spec"><b>Jon fit</b>D</div></div>
+              <p>No new sales after Meta acquisition; not a 2026 buy.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="decision-guide">
+      <div class="wrap">
+        <h2>Decision guide: what I’d actually do</h2>
+        <div class="decision-tree">
+          <div class="glass decision"><h3>If you want one purchase</h3><p>Buy <b>PLAUD Note Pro</b>. It gives the best odds of capturing real life because it is always-ready, discreet, and not dependent on opening an app.</p></div>
+          <div class="glass decision"><h3>If you want zero purchase today</h3><p>Use <b>iPhone call recording + Notes audio recording</b>. This is good enough to test the habit, but not enough as the long-term system.</p></div>
+          <div class="glass decision"><h3>If you want business memory</h3><p>Put one business line into <b>Quo/OpenPhone Business</b>. It creates shared searchable history for calls/texts instead of personal recordings trapped on your phone.</p></div>
+          <div class="glass decision"><h3>If you want best AI call intelligence</h3><p>Trial <b>Dialpad Pro</b>. It is stronger for transcripts, summaries, coaching, and analytics, but heavier to administer.</p></div>
+        </div>
       </div>
     </section>
 
