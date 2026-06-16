@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conversation Capture + AI Notes Stack — Report for Jon Baker</title>
+  <meta name="description" content="A practical, source-backed report on hardware, apps, and business phone systems for recording real-life conversations and AI notes." />
+  <meta property="og:title" content="Conversation Capture + AI Notes Stack" />
+  <meta property="og:description" content="A practical 3-layer capture stack for in-person conversations, phone calls, and business workflows." />
+  <meta name="theme-color" content="#09111f" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(255,255,255,.075);
+      --panel-strong: rgba(255,255,255,.12);
+      --text: #edf5ff;
+      --muted: #a9bad2;
+      --muted2: #71839b;
+      --line: rgba(255,255,255,.14);
+      --blue: #65d4ff;
+      --green: #61f0b1;
+      --yellow: #ffd166;
+      --pink: #ff75b7;
+      --purple: #b99cff;
+      --red: #ff7f7f;
+      --shadow: 0 30px 90px rgba(0,0,0,.42);
+      --radius: 26px;
+      --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 5%, rgba(101,212,255,.28), transparent 34rem),
+        radial-gradient(circle at 85% 10%, rgba(185,156,255,.22), transparent 34rem),
+        radial-gradient(circle at 70% 85%, rgba(97,240,177,.16), transparent 30rem),
+        linear-gradient(180deg, #07111f 0%, #091522 45%, #050a13 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(var(--max), calc(100% - 36px)); margin: 0 auto; }
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; opacity: .13; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    }
+    header.hero { padding: 64px 0 34px; position: relative; overflow: hidden; }
+    .nav {
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(5,10,19,.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 12px 0; }
+    .brand { display: flex; gap: 10px; align-items: center; font-weight: 800; letter-spacing: -.02em; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, var(--blue), var(--green)); box-shadow: 0 12px 28px rgba(101,212,255,.28); }
+    .nav-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-links a { color: var(--muted); font-size: 13px; padding: 8px 10px; border-radius: 999px; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.08); text-decoration: none; }
+    .eyebrow { color: var(--green); font-weight: 800; text-transform: uppercase; letter-spacing: .14em; font-size: 13px; }
+    h1 { font-size: clamp(44px, 7vw, 88px); line-height: .96; letter-spacing: -.07em; margin: 18px 0 20px; max-width: 960px; }
+    .lede { color: #d6e5f7; font-size: clamp(18px, 2.1vw, 24px); max-width: 850px; margin: 0 0 28px; }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 24px; align-items: stretch; }
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.055));
+      border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .verdict { padding: 24px; position: relative; overflow: hidden; }
+    .verdict:before { content: ""; position: absolute; inset: -80px -120px auto auto; width: 260px; height: 260px; background: radial-gradient(circle, rgba(97,240,177,.2), transparent 68%); }
+    .verdict h2, section h2 { margin: 0 0 12px; font-size: clamp(25px, 3vw, 38px); letter-spacing: -.04em; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .badge { border: 1px solid var(--line); background: rgba(255,255,255,.075); border-radius: 999px; padding: 8px 12px; color: #d8e6f5; font-size: 14px; }
+    .scorecard { padding: 20px; display: grid; gap: 14px; }
+    .score-item { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: start; padding: 14px; border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09); }
+    .num { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 14px; color: #04101a; font-weight: 900; background: linear-gradient(135deg, var(--blue), var(--green)); }
+    .score-item h3 { margin: 0 0 3px; font-size: 17px; }
+    .score-item p { margin: 0; color: var(--muted); font-size: 14px; }
+    .section { padding: 54px 0; }
+    .sub { color: var(--muted); margin-top: -6px; max-width: 830px; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 22px; }
+    .card { padding: 22px; min-height: 220px; }
+    .card h3 { margin: 0 0 10px; font-size: 22px; letter-spacing: -.03em; }
+    .card p, .card li { color: var(--muted); }
+    .tag { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #05111f; background: var(--green); padding: 6px 9px; border-radius: 999px; margin-bottom: 12px; }
+    .tag.blue { background: var(--blue); }
+    .tag.yellow { background: var(--yellow); }
+    .tag.pink { background: var(--pink); color: white; }
+    .matrix { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 22px; border: 1px solid var(--line); margin-top: 22px; background: rgba(255,255,255,.045); }
+    .matrix th, .matrix td { text-align: left; padding: 15px 16px; border-bottom: 1px solid rgba(255,255,255,.095); vertical-align: top; }
+    .matrix th { color: #dff4ff; background: rgba(255,255,255,.08); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+    .matrix td { color: var(--muted); }
+    .matrix td:first-child { color: var(--text); font-weight: 750; }
+    .pill { display: inline-block; padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 800; border: 1px solid var(--line); background: rgba(255,255,255,.08); color: #e7f5ff; }
+    .pill.best { background: rgba(97,240,177,.16); color: var(--green); border-color: rgba(97,240,177,.35); }
+    .pill.warn { background: rgba(255,209,102,.15); color: var(--yellow); border-color: rgba(255,209,102,.36); }
+    .pill.no { background: rgba(255,127,127,.15); color: var(--red); border-color: rgba(255,127,127,.36); }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+    .callout { padding: 24px; border-radius: var(--radius); border: 1px solid rgba(97,240,177,.35); background: linear-gradient(135deg, rgba(97,240,177,.12), rgba(101,212,255,.06)); }
+    .warning { border-color: rgba(255,209,102,.35); background: linear-gradient(135deg, rgba(255,209,102,.13), rgba(255,117,183,.05)); }
+    .quote { font-size: 22px; letter-spacing: -.03em; color: #fff; margin: 12px 0 0; }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+    .step { padding: 18px; position: relative; }
+    .step:after { content: "→"; position: absolute; right: -14px; top: 38px; color: var(--muted2); font-size: 26px; }
+    .step:last-child:after { display:none; }
+    .step strong { display: block; font-size: 18px; margin: 8px 0 6px; }
+    .step span { color: var(--muted); font-size: 14px; }
+    details { border: 1px solid var(--line); border-radius: 20px; padding: 0; background: rgba(255,255,255,.055); margin: 12px 0; overflow: hidden; }
+    summary { cursor: pointer; padding: 18px 20px; font-weight: 800; }
+    details .detail { padding: 0 20px 20px; color: var(--muted); }
+    .source-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
+    .source { padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.055); color: var(--muted); font-size: 14px; }
+    .source b { color: var(--text); display: block; }
+    .footer { padding: 50px 0 70px; color: var(--muted2); }
+    .sticky-cta { position: fixed; right: 18px; bottom: 18px; z-index: 20; display: flex; gap: 10px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.1); padding: 12px 16px; border-radius: 999px; backdrop-filter: blur(12px); box-shadow: 0 16px 42px rgba(0,0,0,.24); font-weight: 800; }
+    .btn.primary { background: linear-gradient(135deg, var(--blue), var(--green)); color: #06111e; border: 0; }
+    .mini { font-size: 12px; color: var(--muted2); }
+    @media (max-width: 900px) {
+      .hero-grid, .two, .cards, .source-grid { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .step:after { display:none; }
+      .nav-links { display: none; }
+      .matrix { display: block; overflow-x: auto; white-space: nowrap; }
+      .sticky-cta { display: none; }
+    }
+    @media print {
+      body { background: white; color: #111827; }
+      .nav, .sticky-cta, .noise { display:none; }
+      .glass, .card, .callout, details, .source { box-shadow:none; background:white; color:#111827; border-color:#d1d5db; }
+      a { color:#0645ad; }
+      .matrix td, .matrix th, .card p, .card li, .sub, .detail { color:#374151; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand"><div class="brand-mark"></div><span>Conversation Capture Report</span></div>
+      <div class="nav-links">
+        <a href="#stack">Stack</a><a href="#comparison">Comparison</a><a href="#business">Business Calls</a><a href="#legal">Consent</a><a href="#pilot">Pilot</a><a href="#sources">Sources</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Deep research report · June 16, 2026</div>
+        <h1>Capture every important conversation without becoming a gadget person.</h1>
+        <p class="lede">A practical stack for Jon’s real-life conversations, iPhone calls, and business workflows across Hub City Golf Club, SmartRide, Sign Tech, and personal life.</p>
+        <div class="badge-row">
+          <span class="badge">🎙️ In-person meetings</span>
+          <span class="badge">📞 Phone calls</span>
+          <span class="badge">🧠 AI notes</span>
+          <span class="badge">🏢 Business workflows</span>
+          <span class="badge">⚖️ Consent-aware</span>
+        </div>
+      </div>
+      <aside class="glass scorecard">
+        <div class="score-item"><div class="num">1</div><div><h3>Free baseline</h3><p>Use iPhone native call recording + Notes summaries immediately.</p></div></div>
+        <div class="score-item"><div class="num">2</div><div><h3>Personal capture</h3><p>Buy/test PLAUD Note Pro for in-person + phone call recording without a visible pendant.</p></div></div>
+        <div class="score-item"><div class="num">3</div><div><h3>Business system</h3><p>Pilot Quo/OpenPhone Business or Dialpad Pro for calls through business numbers.</p></div></div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="verdict">
+      <div class="wrap">
+        <div class="glass verdict">
+          <span class="tag">Executive verdict</span>
+          <h2>There is no single magic app. The winning answer is a 3-layer capture stack.</h2>
+          <p class="sub">Real life has different capture surfaces: surprise in-person conversations, personal phone calls, and structured business calls. One tool will fail somewhere. The smallest reliable system uses the best tool for each surface.</p>
+          <div class="two">
+            <div class="callout">
+              <b>Buy first</b>
+              <p class="quote">PLAUD Note Pro</p>
+              <p>Most practical dedicated recorder: discreet, mature AI notes, and better for real-world conversations than a phone app you might forget to open.</p>
+            </div>
+            <div class="callout warning">
+              <b>Avoid as first move</b>
+              <p class="quote">Visible AI pendants</p>
+              <p>Limitless is no longer sold to new customers; Bee/Omi/Friend-style devices feel more like lifelogging companions than polished business note capture.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stack">
+      <div class="wrap">
+        <h2>The recommended capture stack</h2>
+        <p class="sub">This gives you coverage without needing to change your whole life.</p>
+        <div class="cards">
+          <article class="glass card">
+            <span class="tag blue">Layer 1</span>
+            <h3>iPhone native recording</h3>
+            <p><b>Use for:</b> quick personal calls and emergency capture.</p>
+            <ul><li>Built into iOS 18.1+ Phone app.</li><li>Stores recording/transcript in Notes.</li><li>Summary available with Apple Intelligence on supported devices.</li></ul>
+          </article>
+          <article class="glass card">
+            <span class="tag">Layer 2</span>
+            <h3>PLAUD Note Pro</h3>
+            <p><b>Use for:</b> in-person meetings, hallway chats, lunches, site visits, and important calls.</p>
+            <ul><li>Discreet card/phone style.</li><li>Meeting + phone-call modes.</li><li>AI summaries, templates, speaker labels, search.</li></ul>
+          </article>
+          <article class="glass card">
+            <span class="tag yellow">Layer 3</span>
+            <h3>Business phone system</h3>
+            <p><b>Use for:</b> SmartRide, Sign Tech, HCGC numbers.</p>
+            <ul><li>Quo/OpenPhone for simplest shared inbox.</li><li>Dialpad for stronger AI intelligence.</li><li>Records only calls routed through business number/app.</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="comparison">
+      <div class="wrap">
+        <h2>What to use by scenario</h2>
+        <p class="sub">The key is matching the tool to the moment.</p>
+        <table class="matrix">
+          <thead><tr><th>Scenario</th><th>Best option</th><th>Why</th><th>Friction</th></tr></thead>
+          <tbody>
+            <tr><td>In-person business conversation</td><td><span class="pill best">PLAUD Note Pro</span></td><td>Dedicated recorder, fast start, less awkward than holding up phone.</td><td>Consent habit + carrying device.</td></tr>
+            <tr><td>Personal iPhone call</td><td><span class="pill best">iOS native call recording</span></td><td>Built into Phone app; saves recording/transcript in Notes.</td><td>Manual start; Apple Intelligence support varies.</td></tr>
+            <tr><td>Business number call</td><td><span class="pill best">Quo/OpenPhone Business</span></td><td>Shared inbox, call/text history, auto recording, AI summaries.</td><td>Must use business app/number.</td></tr>
+            <tr><td>Sales/support call intelligence</td><td><span class="pill">Dialpad Pro</span></td><td>Better real-time AI transcripts, summaries, search, coaching.</td><td>More admin complexity.</td></tr>
+            <tr><td>App-only in-person notes</td><td><span class="pill">Fireflies or Notta</span></td><td>Good mobile recording + AI summaries without buying hardware.</td><td>You must remember to open app and start recording.</td></tr>
+            <tr><td>Android business/personal calls</td><td><span class="pill">Samsung/Google/Truecaller</span></td><td>Some Android dialers support call recording, transcripts, summaries.</td><td>Device/carrier/region dependent.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="hardware">
+      <div class="wrap">
+        <h2>Hardware / wearable shortlist</h2>
+        <p class="sub">Ranked for Jon: discreet, business-useful, low-maintenance, and able to handle both live conversations and phone calls.</p>
+        <table class="matrix">
+          <thead><tr><th>Product</th><th>Verdict</th><th>Best use</th><th>Caveat</th></tr></thead>
+          <tbody>
+            <tr><td>PLAUD Note Pro</td><td><span class="pill best">Best overall</span></td><td>In-person + phone calls; discreet personal capture.</td><td>Subscription if used heavily.</td></tr>
+            <tr><td>PLAUD Note</td><td><span class="pill best">Strong cheaper pick</span></td><td>Similar PLAUD workflow at lower price.</td><td>Less advanced hardware than Pro.</td></tr>
+            <tr><td>PLAUD NotePin</td><td><span class="pill warn">Good, but wearable</span></td><td>Always-available in-person capture.</td><td>Visible pin/necklace; weaker phone-call fit.</td></tr>
+            <tr><td>Mobvoi TicNote</td><td><span class="pill">Worth watching</span></td><td>PLAUD-like phone-attached recorder.</td><td>Less proven ecosystem; verify current subscription terms.</td></tr>
+            <tr><td>Notta Memo</td><td><span class="pill">Viable alternative</span></td><td>Phone-attached recorder + Notta workspace.</td><td>Battery/spec claims had source-page caveats.</td></tr>
+            <tr><td>soundcore Work</td><td><span class="pill">Good tiny recorder</span></td><td>Small clip for in-person conversations.</td><td>Less complete for phone-call capture.</td></tr>
+            <tr><td>HiDock P1</td><td><span class="pill">Niche</span></td><td>Bluetooth headset calls.</td><td>Not really a general in-room recorder.</td></tr>
+            <tr><td>Limitless Pendant</td><td><span class="pill no">Skip</span></td><td>Historical lifelogging pendant.</td><td>No new sales after Meta acquisition; support transition risk.</td></tr>
+            <tr><td>Bee / Omi / Friend</td><td><span class="pill no">Not first</span></td><td>AI companion/lifelogging experiments.</td><td>Obvious wearable + privacy/social friction.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="business">
+      <div class="wrap">
+        <h2>Business phone layer</h2>
+        <p class="sub">This is how conversations become searchable business memory instead of scattered personal recordings.</p>
+        <div class="two">
+          <article class="glass card">
+            <span class="tag">Simplest SMB pick</span>
+            <h3>Quo / OpenPhone Business</h3>
+            <p>Best first trial for SmartRide, Sign Tech, or Hub City if the goal is simple shared numbers, calls, texts, recordings, transcripts, summaries, and team contact history.</p>
+            <ul><li>Approx. $23/user/mo annual Business tier.</li><li>Automatic recording + AI transcripts/summaries on Business/Scale.</li><li>Great small-team shared inbox.</li></ul>
+          </article>
+          <article class="glass card">
+            <span class="tag pink">Stronger AI pick</span>
+            <h3>Dialpad Pro</h3>
+            <p>Best if you want real-time transcription, call summaries, action items, searchable transcripts, analytics, coaching, and stronger call intelligence.</p>
+            <ul><li>Approx. $25/user/mo annual Pro tier.</li><li>More powerful AI layer.</li><li>More setup/admin than Quo.</li></ul>
+          </article>
+        </div>
+        <div class="callout warning" style="margin-top:18px">
+          <b>Important limitation</b>
+          <p>These systems generally record calls made/received through the business number/app. They usually do <b>not</b> record random personal cellular calls placed from the native iPhone dialer.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="apps">
+      <div class="wrap">
+        <h2>App-only options</h2>
+        <p class="sub">Useful, but weaker as the only system because the failure mode is simple: you forget to start the app.</p>
+        <table class="matrix">
+          <thead><tr><th>App / feature</th><th>Best for</th><th>Pros</th><th>Cons</th></tr></thead>
+          <tbody>
+            <tr><td>Apple Notes / Voice Memos</td><td>Free in-person capture</td><td>Built-in; summaries/transcripts with Apple Intelligence.</td><td>Manual workflow; not a dedicated business memory system.</td></tr>
+            <tr><td>Fireflies mobile</td><td>In-person meetings + team notes</td><td>Mobile record/transcribe/summarize; AskFred; meeting workspace.</td><td>More meeting-platform than personal recorder.</td></tr>
+            <tr><td>Notta</td><td>General mobile transcription</td><td>58 languages; online + in-person; summaries; visual outputs.</td><td>Free plan limited; another app workspace.</td></tr>
+            <tr><td>Otter</td><td>Meetings/interviews</td><td>Familiar AI meeting notes, mobile apps, summaries.</td><td>Minute caps; less phone-call focused.</td></tr>
+            <tr><td>TapeACall</td><td>Fallback call recording</td><td>Incoming/outgoing/in-progress calls; transcription; export.</td><td>Carrier/3-way calling friction; iOS native may now be easier.</td></tr>
+            <tr><td>Rev</td><td>High-quality recordings/human transcripts</td><td>Great audio capture; human transcript option.</td><td>Current App Store listing says call recording is not supported.</td></tr>
+            <tr><td>Truecaller</td><td>Android call recording</td><td>Android call recording + AI transcripts/summaries.</td><td>Official page says call recording is Android-only.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="legal">
+      <div class="wrap">
+        <h2>Consent and legality</h2>
+        <p class="sub">Not legal advice. Practical operator rule: because Jon operates across PA, MD, VA, SC, and FL, use the strictest default.</p>
+        <div class="callout warning">
+          <b>Safe default</b>
+          <p class="quote">Assume all-party consent unless proven otherwise.</p>
+          <p>PA, MD, and FL are all-party consent states. VA and SC are one-party consent, but mixed-state calls make the stricter rule safer.</p>
+        </div>
+        <div class="two">
+          <div class="glass card">
+            <span class="tag yellow">In-person script</span>
+            <p class="quote">“I use an AI recorder so I don’t miss details. Are you okay if I record and transcribe this for my notes?”</p>
+          </div>
+          <div class="glass card">
+            <span class="tag yellow">Phone script</span>
+            <p class="quote">“This call may be recorded and transcribed for notes, quality, and follow-up. Is that okay?”</p>
+          </div>
+        </div>
+        <table class="matrix">
+          <thead><tr><th>State</th><th>Practical rule</th><th>Authority</th></tr></thead>
+          <tbody>
+            <tr><td>Pennsylvania</td><td>All-party consent</td><td><a href="https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/18/00.057..HTM">18 Pa.C.S. §§ 5703, 5704</a></td></tr>
+            <tr><td>Maryland</td><td>All-party consent</td><td><a href="https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=10-402">Md. Cts. & Jud. Proc. §10-402</a></td></tr>
+            <tr><td>Virginia</td><td>One-party consent</td><td><a href="https://law.lis.virginia.gov/vacode/title19.2/chapter6/section19.2-62">Va. Code §19.2-62</a></td></tr>
+            <tr><td>South Carolina</td><td>One-party consent</td><td><a href="https://www.scstatehouse.gov/code/t17c030.php">S.C. Code §17-30-30</a></td></tr>
+            <tr><td>Florida</td><td>All-party consent</td><td><a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0900-0999%2F0934%2FSections%2F0934.03.html">Fla. Stat. §934.03</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="pilot">
+      <div class="wrap">
+        <h2>7-day implementation pilot</h2>
+        <p class="sub">The goal is not perfection. The goal is to learn which capture path Jon actually uses without thinking.</p>
+        <div class="flow">
+          <div class="glass step"><span class="pill">Day 1</span><strong>Enable baseline</strong><span>Update iPhone, test native call recording, test Notes audio summary.</span></div>
+          <div class="glass step"><span class="pill">Day 2</span><strong>Order PLAUD</strong><span>Buy/test PLAUD Note Pro. Create folders: HCGC, SmartRide, Sign Tech, Personal.</span></div>
+          <div class="glass step"><span class="pill">Day 3–4</span><strong>Pilot business calls</strong><span>Trial Quo/OpenPhone on one number. Turn on recording announcement.</span></div>
+          <div class="glass step"><span class="pill">Day 5–7</span><strong>Score reality</strong><span>Did you remember to start it? Was audio clear? Could you find notes later?</span></div>
+        </div>
+        <table class="matrix">
+          <thead><tr><th>Score question</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Did I actually remember to start it?</td><td>If not, it is not the right capture layer.</td></tr>
+            <tr><td>Did it capture both sides clearly?</td><td>Bad audio makes AI notes useless.</td></tr>
+            <tr><td>Did the summary find commitments and next steps?</td><td>This is the whole business value.</td></tr>
+            <tr><td>Can I find the note by company/person later?</td><td>Searchability beats recording volume.</td></tr>
+            <tr><td>Was it socially acceptable?</td><td>If it feels weird, you will stop using it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="sources">
+      <div class="wrap">
+        <h2>Primary sources checked</h2>
+        <p class="sub">Official pages and support docs were prioritized. Vendor pricing changes quickly; verify at checkout before buying.</p>
+        <div class="source-grid">
+          <a class="source" href="https://support.apple.com/en-us/121583"><b>Apple Support</b>Record and transcribe calls on iPhone</a>
+          <a class="source" href="https://support.apple.com/guide/mac-help/use-apple-intelligence-in-notes-mchl2102c2ae/mac"><b>Apple Support</b>Apple Intelligence summaries in Notes</a>
+          <a class="source" href="https://www.plaud.ai/products/plaud-note-pro"><b>PLAUD</b>Note Pro product page</a>
+          <a class="source" href="https://www.plaud.ai/pages/plaud-device-comparison"><b>PLAUD</b>Device comparison</a>
+          <a class="source" href="https://www.openphone.com/product/call-recording"><b>OpenPhone / Quo</b>Call recording</a>
+          <a class="source" href="https://www.quo.com/pricing"><b>Quo</b>Pricing</a>
+          <a class="source" href="https://www.dialpad.com/features/ai-transcription"><b>Dialpad</b>AI transcription</a>
+          <a class="source" href="https://www.dialpad.com/features/call-summary"><b>Dialpad</b>Call summary</a>
+          <a class="source" href="https://fireflies.ai/mobile"><b>Fireflies</b>Mobile in-person conversations</a>
+          <a class="source" href="https://fireflies.ai/pricing"><b>Fireflies</b>Pricing</a>
+          <a class="source" href="https://www.notta.ai/en/pricing"><b>Notta</b>Pricing</a>
+          <a class="source" href="https://otter.ai/pricing"><b>Otter</b>Pricing</a>
+          <a class="source" href="https://www.tapeacall.com"><b>TapeACall</b>Call recording</a>
+          <a class="source" href="https://www.truecaller.com/call-recording"><b>Truecaller</b>Call recording</a>
+          <a class="source" href="https://support.google.com/phoneapp/answer/9803950?hl=en"><b>Google Phone</b>Call recording support</a>
+          <a class="source" href="https://www.samsung.com/us/support/answer/ANS10004613"><b>Samsung</b>Galaxy call recording + Transcript Assist</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="glass verdict">
+          <span class="tag">Final call</span>
+          <h2>Start with iPhone + PLAUD Note Pro + one Quo/OpenPhone pilot.</h2>
+          <p class="sub">Do not start by wearing a pendant. Do not depend only on an app. Start with the stack that captures the most valuable conversations with the least behavior change.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="sticky-cta">
+    <button class="btn" onclick="window.print()">Print / PDF</button>
+    <a class="btn primary" href="#pilot">Start pilot</a>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p><b>Prepared for Jon Baker.</b> Research timestamp: 2026-06-16 14:29 EDT. This report is operational guidance, not legal advice.</p>
+    </div>
+  </footer>
+</body>
+</html>
